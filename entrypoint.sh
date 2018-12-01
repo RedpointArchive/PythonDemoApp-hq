@@ -7,10 +7,12 @@ cd app
 # container restarts. You need to make sure your database points
 # to either a managed database or a database inside a stateful set
 # so that data is not lost.
+echo "Performing database migrations..."
 python manage.py migrate
 
 # Use the development server. This isn't an example of how to run
 # a Python application in production, as outlined in the Django
 # documentation, but it's good enough to demonstrate running a
 # Python app in a container.
+echo "Starting development server..."
 python manage.py runserver 0:8080

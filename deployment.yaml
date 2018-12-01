@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demoapp
+  labels:
+    app: demoapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demoapp
+  template:
+    metadata:
+      labels:
+        app: demoapp
+    spec:
+      containers:
+      - name: demoapp
+        image: my-app:latest
+        # Remove the imagePullPolicy if you've pushed the Docker image
+        # to a Docker registry. Leave as "Never" if you're using 
+        # something like Docker for Windows and have built the image
+        # locally.
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: demoapp
+spec:
+  # Choose one of "ClusterIP", "NodePort" or "LoadBalancer". ClusterIP
+  # if the app should only be accessible internally, NodePort if you
+  # want clients to connect directly on the VM's IP address or
+  # LoadBalancer if you want your provider to automatically provision
+  # a TCP load balancer and route traffic to the application.
+  type: LoadBalancer
+  selector:
+    app: demoapp
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
